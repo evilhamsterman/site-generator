@@ -1,6 +1,6 @@
 from enum import StrEnum
 
-from htmlnode import LeafNode
+from src.htmlnode import LeafNode
 
 
 class TextTypes(StrEnum):
@@ -30,7 +30,7 @@ class TextNode:
         return f"TextNode('{self.text}', '{self.text_type}', '{self.url}')"
 
 
-def text_node_to_html_node(text_node: TextNode):
+def text_node_to_html_node(text_node: TextNode) -> LeafNode:
     if text_node.text_type not in TextTypes:
         raise ValueError(f"Invalid text type {text_node.text_type}")
 
@@ -46,3 +46,26 @@ def text_node_to_html_node(text_node: TextNode):
         return LeafNode(tag="a", value=text_node.text, props={"href": text_node.url})
     if text_node.text_type == TextTypes.IMAGE:
         return LeafNode(tag="img", props={"src": text_node.url, "alt": text_node.text})
+
+
+def split_nodes_delimiter(
+    old_nodes: list[TextNode], delimiter: str, text_type: TextTypes
+) -> list[TextNode]:
+    nodes = []
+    for node in old_nodes:
+        if node.text_type != TextTypes.TEXT:
+            nodes.append(node)
+            continue
+        node_parts = []
+        parts = node.text.split(delimiter)
+        if len(parts) % 2 == 0:
+            raise ValueError(f"Delimiter {delimiter} not closed")
+        for i in range(len(parts)):
+            if parts[i] == "":
+                continue
+            if i % 2 == 0:
+                node_parts.append(TextNode(parts[i], TextTypes.TEXT))
+            else:
+                node_parts.append(TextNode(parts[i], text_type))
+        nodes.extend(node_parts)
+    return nodes
