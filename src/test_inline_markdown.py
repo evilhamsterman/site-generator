@@ -4,6 +4,8 @@ from inline_markdown import (
     extract_markdown_images,
     extract_markdown_links,
     split_nodes_delimiter,
+    split_nodes_image,
+    split_nodes_link,
 )
 from textnode import TextNode, TextTypes
 
@@ -95,3 +97,31 @@ class TestInlineMarkdown(unittest.TestCase):
         ]
         actual = extract_markdown_images(images)
         self.assertEqual(expected, actual)
+
+    def test_split_nodes_images(self):
+        images = TextNode(
+            "This is text with an ![image](https://example.com/image1.png) and ![another](https://example.com/image2.jpg)",  # noqa: E501
+            TextTypes.TEXT,
+        )
+        expected = [
+            TextNode("This is text with an ", TextTypes.TEXT),
+            TextNode("image", TextTypes.IMAGE, "https://example.com/image1.png"),
+            TextNode(" and ", TextTypes.TEXT),
+            TextNode("another", TextTypes.IMAGE, "https://example.com/image2.jpg"),
+        ]
+        actual = split_nodes_image([images])
+        self.assertListEqual(expected, actual)
+
+    def test_split_nodes_links(self):
+        images = TextNode(
+            "This is text with a [link](https://example.com) and [another](https://google.com)",  # noqa: E501
+            TextTypes.TEXT,
+        )
+        expected = [
+            TextNode("This is text with a ", TextTypes.TEXT),
+            TextNode("link", TextTypes.LINK, "https://example.com"),
+            TextNode(" and ", TextTypes.TEXT),
+            TextNode("another", TextTypes.LINK, "https://google.com"),
+        ]
+        actual = split_nodes_link([images])
+        self.assertListEqual(expected, actual)
