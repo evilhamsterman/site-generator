@@ -1,7 +1,12 @@
 import unittest
 
-from src import textnode
-from textnode import TextNode, TextTypes, split_nodes_delimiter
+from textnode import (
+    TextNode,
+    TextTypes,
+    extract_markdown_images,
+    extract_markdown_links,
+    split_nodes_delimiter,
+)
 
 
 class TestTextNode(unittest.TestCase):
@@ -78,6 +83,24 @@ class TestTextNode(unittest.TestCase):
         node = TextNode(text="This **tag is not closed", text_type=TextTypes.TEXT)
         with self.assertRaises(ValueError):
             split_nodes_delimiter([node], "**", text_type=TextTypes.BOLD)
+
+    def test_extract_markdown_links(self):
+        links = "This is text with a [link](https://www.example.com) and [another](https://www.example.com/another)"  # noqa: E501
+        expected = [
+            ("link", "https://www.example.com"),
+            ("another", "https://www.example.com/another"),
+        ]
+        actual = extract_markdown_links(links)
+        self.assertEqual(expected, actual)
+
+    def test_extract_markdown_images(self):
+        images = "This is text with an ![image](https://example.com/image1.png) and ![another](https://example.com/image2.jpg)"  # noqa: E501
+        expected = [
+            ("image", "https://example.com/image1.png"),
+            ("another", "https://example.com/image2.jpg"),
+        ]
+        actual = extract_markdown_images(images)
+        self.assertEqual(expected, actual)
 
 
 if __name__ == "__main__":
