@@ -6,6 +6,7 @@ from inline_markdown import (
     split_nodes_delimiter,
     split_nodes_image,
     split_nodes_link,
+    text_to_textnodes,
 )
 from textnode import TextNode, TextTypes
 
@@ -124,4 +125,25 @@ class TestInlineMarkdown(unittest.TestCase):
             TextNode("another", TextTypes.LINK, "https://google.com"),
         ]
         actual = split_nodes_link([images])
+        self.assertListEqual(expected, actual)
+
+    def test_text_to_textnodes(self):
+        text = "This is **text** with an *italic* word and a `code block` and an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and a [link](https://boot.dev)"  # noqa: E501
+        expected = [
+            TextNode("This is ", TextTypes.TEXT),
+            TextNode("text", TextTypes.BOLD),
+            TextNode(" with an ", TextTypes.TEXT),
+            TextNode("italic", TextTypes.ITALIC),
+            TextNode(" word and a ", TextTypes.TEXT),
+            TextNode("code block", TextTypes.CODE),
+            TextNode(" and an ", TextTypes.TEXT),
+            TextNode(
+                "image",
+                TextTypes.IMAGE,
+                "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png",
+            ),
+            TextNode(" and a ", TextTypes.TEXT),
+            TextNode("link", TextTypes.LINK, "https://boot.dev"),
+        ]
+        actual = text_to_textnodes(text)
         self.assertListEqual(expected, actual)

@@ -1,4 +1,5 @@
 import re
+from typing import Text
 
 from textnode import TextNode, TextTypes
 
@@ -80,3 +81,13 @@ def split_nodes_link(old_nodes: list[TextNode]) -> list[TextNode]:
         if text != "":
             nodes.append(TextNode(text=text, text_type=TextTypes.TEXT))
     return nodes
+
+
+def text_to_textnodes(text: str) -> list[TextNode]:
+    text: list[TextNode] = [TextNode(text=text, text_type=TextTypes.TEXT)]
+    text = split_nodes_image(text)
+    text = split_nodes_link(text)
+    text = split_nodes_delimiter(text, "**", TextTypes.BOLD)
+    text = split_nodes_delimiter(text, "*", TextTypes.ITALIC)
+    text = split_nodes_delimiter(text, "`", TextTypes.CODE)
+    return text
