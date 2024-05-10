@@ -140,7 +140,7 @@ class TestInlineMarkdown(unittest.TestCase):
             TextNode(
                 "image",
                 TextTypes.IMAGE,
-                "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png",
+                "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png",  # noqa: E501
             ),
             TextNode(" and a ", TextTypes.TEXT),
             TextNode("link", TextTypes.LINK, "https://boot.dev"),
