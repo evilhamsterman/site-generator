@@ -13,4 +13,4 @@ def markdown_to_blocks(markdown: str) -> list[str]:
             block = ""
     if block != "":
         blocks.append(block.rstrip("\n"))
-    print(blocks)
+    return blocks

@@ -63,3 +63,7 @@ class Test_ParentNode(unittest.TestCase):
         expected = "<p><b>Bold text</b>Normal text<i>italic text</i>Normal text<span><b>Bold text</b>Normal text<i>italic text</i>Normal text</span></p>"  # noqa E501
         actual = node.to_html()
         self.assertEqual(expected, actual)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -147,3 +147,7 @@ class TestInlineMarkdown(unittest.TestCase):
         ]
         actual = text_to_textnodes(text)
         self.assertListEqual(expected, actual)
+
+
+if __name__ == "__main__":
+    unittest.main()
