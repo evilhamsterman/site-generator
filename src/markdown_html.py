@@ -6,6 +6,14 @@ from markdown_blocks import BlockTypes, block_to_block_type, markdown_to_blocks
 from textnode import text_node_to_html_node
 
 
+def children_to_html(text: str) -> list[HTMLNode]:
+    html_nodes: list[HTMLNode] = []
+    text_nodes = text_to_textnodes(text)
+    for text_node in text_nodes:
+        html_nodes.append(text_node_to_html_node(text_node))
+    return html_nodes
+
+
 def markdown_to_html_node(markdown: str) -> HTMLNode:
     result: list[HTMLNode] = []
 
@@ -18,31 +26,27 @@ def markdown_to_html_node(markdown: str) -> HTMLNode:
         if block_type == BlockTypes.QUOTE:
             html_nodes: list[HTMLNode] = []
             for line in block.splitlines():
-                text_nodes = text_to_textnodes(line.lstrip("> "))
-                for text_node in text_nodes:
-                    html_nodes.append(text_node_to_html_node(text_node))
+                html_nodes.extend(children_to_html(line.lstrip("> ")))
             result.append(ParentNode(tag="blockquote", children=html_nodes))
 
         # Unordered List blocks
         elif block_type == BlockTypes.UNORDERD_LIST:
             html_nodes: list[HTMLNode] = []
             for line in block.splitlines():
-                line_nodes: list[LeafNode] = []
-                text_nodes = text_to_textnodes(re.sub(r"^[*|-] ", "", line))
-                for text_node in text_nodes:
-                    line_nodes.append(text_node_to_html_node(text_node))
-                html_nodes.append(ParentNode(tag="li", children=line_nodes))
+                line_text = re.sub(r"^[*|-] ", "", line)
+                html_nodes.append(
+                    ParentNode(tag="li", children=children_to_html(line_text))
+                )
             result.append(ParentNode(tag="ul", children=html_nodes))
 
         # Ordered List
         elif block_type == BlockTypes.ORDERED_LIST:
             html_nodes: list[HTMLNode] = []
             for line in block.splitlines():
-                line_nodes: list[LeafNode] = []
-                text_nodes = text_to_textnodes(re.sub(r"^^[\d]+. ", "", line))
-                for text_node in text_nodes:
-                    line_nodes.append(text_node_to_html_node(text_node))
-                html_nodes.append(ParentNode(tag="li", children=line_nodes))
+                line_text = re.sub(r"^^[\d]+. ", "", line)
+                html_nodes.append(
+                    ParentNode(tag="li", children=children_to_html(line_text))
+                )
             result.append(ParentNode(tag="ol", children=html_nodes))
 
         # Code
@@ -54,19 +58,14 @@ def markdown_to_html_node(markdown: str) -> HTMLNode:
         # Headings
         elif block_type == BlockTypes.HEADING:
             levels = block.find(" ")
-            line_nodes = []
-            text_nodes = text_to_textnodes(block[levels + 1 :])
-            for text_node in text_nodes:
-                line_nodes.append(text_node_to_html_node(text_node))
-            result.append(ParentNode(tag=f"h{levels}", children=line_nodes))
+            line_text = block[levels + 1 :]
+            result.append(
+                ParentNode(tag=f"h{levels}", children=children_to_html(line_text))
+            )
 
         # Everything else is a paragraph
         else:
-            html_nodes: list[HTMLNode] = []
             text = block.replace("\n", " ").rstrip()
-            text_nodes = text_to_textnodes(text)
-            for text_node in text_nodes:
-                html_nodes.append(text_node_to_html_node(text_node))
-            result.append(ParentNode(tag="p", children=html_nodes))
+            result.append(ParentNode(tag="p", children=children_to_html(text)))
 
     return ParentNode("div", result)
