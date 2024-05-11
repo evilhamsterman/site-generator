@@ -35,7 +35,7 @@ def text_node_to_html_node(text_node: TextNode) -> LeafNode:
         raise ValueError(f"Invalid text type {text_node.text_type}")
 
     if text_node.text_type == TextTypes.TEXT:
-        return LeafNode(value=text_node.text)
+        return LeafNode(tag=None, value=text_node.text)
     if text_node.text_type == TextTypes.BOLD:
         return LeafNode(tag="b", value=text_node.text)
     if text_node.text_type == TextTypes.ITALIC:

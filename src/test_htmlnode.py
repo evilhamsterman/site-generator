@@ -54,7 +54,7 @@ class Test_ParentNode(unittest.TestCase):
         self.assertRaises(ValueError, node.to_html)
 
     def test_empty_children(self):
-        node = ParentNode(tag="b", children=None)
+        node = ParentNode(tag="b", children=None)  # type: ignore
         self.assertRaises(ValueError, node.to_html)
 
     def test_nested_parent(self):

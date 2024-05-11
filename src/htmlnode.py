@@ -1,10 +1,13 @@
+from typing import Sequence
+
+
 class HTMLNode:
     def __init__(
         self,
-        tag: str = None,
-        value: str = None,
-        children: list["HTMLNode"] = None,
-        props: dict = None,
+        tag: str | None = None,
+        value: str | None = None,
+        children: Sequence["HTMLNode"] | None = None,
+        props: dict | None = None,
     ) -> None:
         self.tag = tag
         self.value = value
@@ -14,7 +17,7 @@ class HTMLNode:
     def to_html(self) -> None:
         raise NotImplementedError
 
-    def props_to_html(self) -> None:
+    def props_to_html(self) -> str:
         if not self.props:
             return ""
         result = ""
@@ -29,7 +32,7 @@ class HTMLNode:
 
 
 class LeafNode(HTMLNode):
-    def __init__(self, tag: str, value: str, props: dict = None) -> None:
+    def __init__(self, tag: str | None, value: str, props: dict | None = None) -> None:
         super().__init__(tag=tag, value=value, props=props)
 
     def to_html(self) -> str:
@@ -44,7 +47,9 @@ class LeafNode(HTMLNode):
 
 
 class ParentNode(HTMLNode):
-    def __init__(self, tag: str, children: list[HTMLNode], props: dict = None) -> None:
+    def __init__(
+        self, tag: str | None, children: Sequence[HTMLNode], props: dict | None = None
+    ) -> None:
         super().__init__(tag=tag, children=children, props=props)
 
     def to_html(self) -> str:

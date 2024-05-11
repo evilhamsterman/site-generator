@@ -1,12 +1,12 @@
 import unittest
 
-from textnode import TextNode
+from textnode import TextNode, TextTypes
 
 
 class TestTextNode(unittest.TestCase):
     def test_eq(self):
-        node = TextNode("This is a text node", "bold")
-        node2 = TextNode("This is a text node", "bold")
+        node = TextNode("This is a text node", TextTypes.BOLD)
+        node2 = TextNode("This is a text node", TextTypes.BOLD)
         self.assertEqual(node, node2)
 
 

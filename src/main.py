@@ -1,8 +1,8 @@
-from textnode import TextNode
+from textnode import TextNode, TextTypes
 
 
 def main():
-    print(TextNode("Text for node", "bold", "https://weather.gov"))
+    print(TextNode("Text for node", TextTypes.BOLD, "https://weather.gov"))
 
 
 if __name__ == "__main__":
