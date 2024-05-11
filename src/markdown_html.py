@@ -1,7 +1,5 @@
 import re
 
-from icecream import ic
-
 from htmlnode import HTMLNode, LeafNode, ParentNode
 from inline_markdown import text_to_textnodes
 from markdown_blocks import BlockTypes, block_to_block_type, markdown_to_blocks
@@ -71,5 +69,4 @@ def markdown_to_html_node(markdown: str) -> HTMLNode:
                 html_nodes.append(text_node_to_html_node(text_node))
             result.append(ParentNode(tag="p", children=html_nodes))
 
-    ic(result)
     return ParentNode("div", result)
