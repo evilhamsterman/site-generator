@@ -1,8 +1,8 @@
-from textnode import TextNode, TextTypes
+from generate import copy_static_to_public
 
 
 def main():
-    print(TextNode("Text for node", TextTypes.BOLD, "https://weather.gov"))
+    copy_static_to_public()
 
 
 if __name__ == "__main__":
