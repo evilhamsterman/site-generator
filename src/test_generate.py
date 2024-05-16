@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path, PosixPath
 from textwrap import dedent
 
-from generate import TitleNotFoundError, copy_folder, extract_title
+from generate import TitleNotFoundError, copy_folder, extract_title, replace_placeholder
 
 
 class TestGenerate(unittest.TestCase):
@@ -42,3 +42,21 @@ class TestGenerate(unittest.TestCase):
             """
         )
         self.assertRaises(TitleNotFoundError, extract_title, markdown)
+
+    def test_replace_placeholder(self):
+        template = dedent(
+            """
+            <html>
+                <title> {{ Title }} </title>
+            </html>
+            """
+        )
+        expected = template = dedent(
+            """
+            <html>
+                <title> My Title </title>
+            </html>
+            """
+        )
+        actual = replace_placeholder(template, "My Title", "{{ Title }}")
+        self.assertEqual(expected, actual)

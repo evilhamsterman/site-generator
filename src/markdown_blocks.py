@@ -7,7 +7,7 @@ class BlockTypes(StrEnum):
     HEADING: str = "heading"
     CODE: str = "code"
     QUOTE: str = "quote"
-    UNORDERD_LIST: str = "unordered_list"
+    UNORDERED_LIST: str = "unordered_list"
     ORDERED_LIST: str = "orderd_list"
 
 
@@ -38,12 +38,14 @@ def block_to_block_type(markdown: str) -> BlockTypes:
     if all(map(lambda x: re.match(r"^>", x), lines)):
         return BlockTypes.QUOTE
     if all(map(lambda x: re.match(r"^[*|-] ", x), lines)):
-        return BlockTypes.UNORDERD_LIST
-    ordered_list = True
-    for i in range(1, len(lines)):
-        if not re.match(f"^{i}. ", lines[i - 1]):
+        return BlockTypes.UNORDERED_LIST
+    for i in range(len(lines)):
+        if not re.match(f"^{i+1}. ", lines[i]):
             ordered_list = False
             break
+        else:
+            ordered_list = True
+
     if ordered_list:
         return BlockTypes.ORDERED_LIST
     return BlockTypes.PARAGRAPH

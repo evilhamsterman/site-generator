@@ -130,7 +130,7 @@ class TestMarkdown(unittest.TestCase):
             """
             ),
         ]
-        expected = BlockTypes.UNORDERD_LIST
+        expected = BlockTypes.UNORDERED_LIST
         for list_type in blocks:
             actual = block_to_block_type(list_type)
             self.assertEqual(expected, actual)

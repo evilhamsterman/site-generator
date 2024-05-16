@@ -30,7 +30,7 @@ def markdown_to_html_node(markdown: str) -> HTMLNode:
             result.append(ParentNode(tag="blockquote", children=html_nodes))
 
         # Unordered List blocks
-        elif block_type == BlockTypes.UNORDERD_LIST:
+        elif block_type == BlockTypes.UNORDERED_LIST:
             html_nodes: list[HTMLNode] = []
             for line in block.splitlines():
                 line_text = re.sub(r"^[*|-] ", "", line)

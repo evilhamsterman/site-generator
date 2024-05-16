@@ -25,12 +25,13 @@ class TextNode:
             and self.url == value.url
         ):
             return True
+        return False
 
     def __repr__(self) -> str:
         return f"TextNode('{self.text}', '{self.text_type}', '{self.url}')"
 
 
-def text_node_to_html_node(text_node: TextNode) -> LeafNode:
+def text_node_to_html_node(text_node: TextNode) -> LeafNode | None:
     if text_node.text_type not in TextTypes:
         raise ValueError(f"Invalid text type {text_node.text_type}")
 
@@ -45,4 +46,8 @@ def text_node_to_html_node(text_node: TextNode) -> LeafNode:
     if text_node.text_type == TextTypes.LINK:
         return LeafNode(tag="a", value=text_node.text, props={"href": text_node.url})
     if text_node.text_type == TextTypes.IMAGE:
-        return LeafNode(tag="img", props={"src": text_node.url, "alt": text_node.text})
+        return LeafNode(
+            tag="img",
+            value="",
+            props={"src": text_node.url, "alt": text_node.text},
+        )

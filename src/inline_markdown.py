@@ -31,7 +31,7 @@ def extract_markdown_images(text: str) -> list[tuple[str, str]]:
 
 
 def extract_markdown_links(text: str) -> list[tuple[str, str]]:
-    return re.findall(r"[^!]\[(.*?)\]\((.*?)\)", text)
+    return re.findall(r"(?<!\!)\[(.*?)\]\((.*?)\)", text)
 
 
 def split_nodes_image(old_nodes: list[TextNode]) -> list[TextNode]:
