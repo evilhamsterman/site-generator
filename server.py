@@ -1,5 +1,5 @@
-import os
 import argparse
+import os
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 
@@ -25,7 +25,9 @@ def run(
         os.chdir(directory)
     server_address = ("", port)
     httpd = server_class(server_address, handler_class)
-    print(f"Serving HTTP on http://localhost:{port} from directory '{directory}'...")
+    print(
+        f"Serving HTTP on http://{httpd.server_address[0]}:{port} from directory '{directory}'..."  # noqa: E501
+    )
     httpd.serve_forever()
 
 
