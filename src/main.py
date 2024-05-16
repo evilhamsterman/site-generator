@@ -1,12 +1,12 @@
-from generate import copy_static_to_public, generate_page
+from generate import copy_static_to_public, generate_pages_recursive
 
 
 def main():
     copy_static_to_public()
-    generate_page(
-        from_path="content/index.md",
+    generate_pages_recursive(
+        content_dir_path="content",
         template_path="template.html",
-        dest_path="public/index.html",
+        dest_dir_path="public",
     )
 
 

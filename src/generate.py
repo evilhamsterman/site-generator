@@ -1,5 +1,6 @@
 import os
 import shutil
+from pathlib import Path
 
 from markdown_html import markdown_to_html_node
 
@@ -46,14 +47,17 @@ def replace_placeholder(template: str, value: str, placeholder: str) -> str:
     return value.join(template_parts)
 
 
-def generate_page(from_path: str, template_path: str, dest_path: str) -> None:
+def generate_page(
+    from_path: str | Path, template_path: str | Path, dest_path: str | Path
+) -> None:
+    from_path = Path(from_path)
+    template_path = Path(template_path)
+    dest_path = Path(dest_path)
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
 
     # Read file data
-    with open(from_path, "r") as file:
-        markdown = file.read()
-    with open(template_path, "r") as file:
-        template = file.read()
+    markdown = from_path.read_text()
+    template = template_path.read_text()
 
     # Covert
     title = extract_title(markdown)
@@ -64,5 +68,27 @@ def generate_page(from_path: str, template_path: str, dest_path: str) -> None:
     template = replace_placeholder(template, html, "{{ Content }}")
 
     # Write out files
-    with open(dest_path, "w") as file:
-        file.write(template)
+    dest_path.write_text(template)
+
+
+def generate_pages_recursive(
+    content_dir_path: str | Path, template_path: str | Path, dest_dir_path: str | Path
+) -> None:
+    content_dir_path = Path(content_dir_path)
+    template_path = Path(template_path)
+    dest_dir_path = Path(dest_dir_path)
+    for _, directories, files in content_dir_path.walk():
+        for file in files:
+            dest = dest_dir_path / file.replace("md", "html")
+            file = content_dir_path / file
+            generate_page(from_path=file, template_path=template_path, dest_path=dest)
+        for directory in directories:
+            content = content_dir_path / directory
+            dest = dest_dir_path / directory
+            if not dest.is_dir() and not dest.exists():
+                dest.mkdir()
+            generate_pages_recursive(
+                content_dir_path=content,
+                template_path=template_path,
+                dest_dir_path=dest,
+            )
