@@ -1,14 +1,14 @@
 import re
-from enum import StrEnum
+from enum import StrEnum, auto
 
 
 class BlockTypes(StrEnum):
-    PARAGRAPH: str = "paragraph"
-    HEADING: str = "heading"
-    CODE: str = "code"
-    QUOTE: str = "quote"
-    UNORDERED_LIST: str = "unordered_list"
-    ORDERED_LIST: str = "orderd_list"
+    PARAGRAPH = auto()
+    HEADING = auto()
+    CODE = auto()
+    QUOTE = auto()
+    UNORDERED_LIST = auto()
+    ORDERED_LIST = auto()
 
 
 def markdown_to_blocks(markdown: str) -> list[str]:

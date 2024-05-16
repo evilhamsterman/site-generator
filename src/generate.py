@@ -50,9 +50,9 @@ def generate_page(from_path: str, template_path: str, dest_path: str) -> None:
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
 
     # Read file data
-    with open(from_path) as file:
+    with open(from_path, "r") as file:
         markdown = file.read()
-    with open(template_path) as file:
+    with open(template_path, "r") as file:
         template = file.read()
 
     # Covert

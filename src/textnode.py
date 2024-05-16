@@ -1,19 +1,19 @@
-from enum import StrEnum
+from enum import StrEnum, auto
 
 from htmlnode import LeafNode
 
 
 class TextTypes(StrEnum):
-    TEXT: str = "text"
-    BOLD: str = "bold"
-    ITALIC: str = "italic"
-    CODE: str = "code"
-    LINK: str = "link"
-    IMAGE: str = "image"
+    TEXT = auto()
+    BOLD = auto()
+    ITALIC = auto()
+    CODE = auto()
+    LINK = auto()
+    IMAGE = auto()
 
 
 class TextNode:
-    def __init__(self, text: str, text_type: TextTypes, url: str = None) -> None:
+    def __init__(self, text: str, text_type: TextTypes, url: str | None = None) -> None:
         self.text = text
         self.text_type = text_type
         self.url = url
@@ -31,23 +31,22 @@ class TextNode:
         return f"TextNode('{self.text}', '{self.text_type}', '{self.url}')"
 
 
-def text_node_to_html_node(text_node: TextNode) -> LeafNode | None:
-    if text_node.text_type not in TextTypes:
-        raise ValueError(f"Invalid text type {text_node.text_type}")
-
+def text_node_to_html_node(text_node: TextNode) -> LeafNode:
     if text_node.text_type == TextTypes.TEXT:
         return LeafNode(tag=None, value=text_node.text)
-    if text_node.text_type == TextTypes.BOLD:
+    elif text_node.text_type == TextTypes.BOLD:
         return LeafNode(tag="b", value=text_node.text)
-    if text_node.text_type == TextTypes.ITALIC:
+    elif text_node.text_type == TextTypes.ITALIC:
         return LeafNode(tag="i", value=text_node.text)
-    if text_node.text_type == TextTypes.CODE:
+    elif text_node.text_type == TextTypes.CODE:
         return LeafNode(tag="code", value=text_node.text)
-    if text_node.text_type == TextTypes.LINK:
+    elif text_node.text_type == TextTypes.LINK:
         return LeafNode(tag="a", value=text_node.text, props={"href": text_node.url})
-    if text_node.text_type == TextTypes.IMAGE:
+    elif text_node.text_type == TextTypes.IMAGE:
         return LeafNode(
             tag="img",
             value="",
             props={"src": text_node.url, "alt": text_node.text},
         )
+    else:
+        raise ValueError(f"Invalid text type {text_node.text_type}")
