@@ -2,6 +2,9 @@ import os
 import shutil
 
 
+class TitleNotFoundError(Exception): ...
+
+
 def copy_folder(source_path: str, dest_path: str):
     if not os.path.exists(dest_path):
         os.mkdir(dest_path)
@@ -26,3 +29,11 @@ def copy_static_to_public():
     # Walk the tree
     print("Copying static files")
     copy_folder(source_path=source_path, dest_path=public_path)
+
+
+def extract_title(markdown) -> str:
+    for line in markdown.split("\n"):
+        if line.startswith("# "):
+            title = line[2:]
+            return title
+    raise TitleNotFoundError("No title found in document")

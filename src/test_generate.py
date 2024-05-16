@@ -1,8 +1,9 @@
 import shutil
 import unittest
 from pathlib import Path, PosixPath
+from textwrap import dedent
 
-from generate import copy_folder
+from generate import TitleNotFoundError, copy_folder, extract_title
 
 
 class TestGenerate(unittest.TestCase):
@@ -19,3 +20,25 @@ class TestGenerate(unittest.TestCase):
         copy_folder(str(static_path), str(public_path))
         actual = list(public_path.walk())
         self.assertListEqual(expected, actual)
+
+    def test_extract_title(self):
+        markdown = dedent(
+            """
+            # Title
+
+            paragraph
+            """
+        )
+        expected = "Title"
+        actual = extract_title(markdown)
+        self.assertEqual(expected, actual)
+
+    def test_extract_title_not_found(self):
+        markdown = dedent(
+            """
+            Title
+
+            paragraph
+            """
+        )
+        self.assertRaises(TitleNotFoundError, extract_title, markdown)
